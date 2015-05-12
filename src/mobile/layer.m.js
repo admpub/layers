@@ -6,13 +6,13 @@
  @Copyright：Sentsin Xu(贤心)
  @官网：http://sentsin.com/layui/layer
  @License：MIT
-        
+
  */
 
-;!function(win){        
+;!function(win){
 "use strict";
 
-var path = ''; //所在路径，如果非模块加载不用配置
+var path = window.LAYER_PATH||''; //所在路径，如果非模块加载不用配置
 path = path ? path : document.scripts[document.scripts.length-1].src.match(/[\s\S]*\//)[0];
 
 var doc = document, query = 'querySelectorAll', claname = 'getElementsByClassName', S = function(s){
@@ -45,7 +45,7 @@ win.ready = {
             newobj[i] = obj[i];
         }
         return newobj;
-    }, 
+    },
     timer: {},
     end: {}
 };
@@ -69,7 +69,7 @@ Layer.prototype.view = function(){
         ? '<h3 style="'+ (titype ? config.title[1] : '') +'">'+ (titype ? config.title[0] : config.title)  +'</h3><button class="layermend"></button>'
         : '';
     }());
-    
+
     var button = (function(){
         var btns = (config.btn || []).length, btndom;
         if(btns === 0 || !config.btn){
@@ -81,17 +81,17 @@ Layer.prototype.view = function(){
         }
         return '<div class="layermbtn">'+ btndom + '</div>';
     }());
-    
+
     if(!config.fixed){
         config.top = config.hasOwnProperty('top') ?  config.top : 100;
         config.style = config.style || '';
         config.style += ' top:'+ ( doc.body.scrollTop + config.top) + 'px';
     }
-    
+
     if(config.type === 2){
         config.content = '<i></i><i class="laymloadtwo"></i><i></i><div>' + (config.content||'') + '</div>';
     }
-    
+
     layerbox.innerHTML = (config.shade ? '<div '+ (typeof config.shade === 'string' ? 'style="'+ config.shade +'"' : '') +' class="laymshade"></div>' : '')
     +'<div class="layermmain" '+ (!config.fixed ? 'style="position:static;"' : '') +'>'
         +'<div class="section">'
@@ -102,14 +102,14 @@ Layer.prototype.view = function(){
             +'</div>'
         +'</div>'
     +'</div>';
-    
+
     if(!config.type || config.type === 2){
         var dialogs = doc[claname](classs[0] + config.type), dialen = dialogs.length;
         if(dialen >= 1){
             layer.close(dialogs[0].getAttribute('index'))
         }
     }
-    
+
     document.body.appendChild(layerbox);
     var elem = that.elem = S('#'+that.id)[0];
     setTimeout(function(){
@@ -120,21 +120,21 @@ Layer.prototype.view = function(){
         }
         config.success && config.success(elem);
     }, 1);
-    
+
     that.index = index++;
     that.action(config, elem);
 };
 
 Layer.prototype.action = function(config, elem){
     var that = this;
-    
+
     //自动关闭
     if(config.time){
         ready.timer[that.index] = setTimeout(function(){
             layer.close(that.index);
         }, config.time*1000);
     }
-    
+
     //关闭按钮
     if(config.title){
         elem[claname]('layermend')[0].onclick = function(){
@@ -142,7 +142,7 @@ Layer.prototype.action = function(config, elem){
             layer.close(that.index);
         };
     }
-    
+
     //确认取消
     if(config.btn){
         var btns = elem[claname]('layermbtn')[0].children, btnlen = btns.length;
@@ -158,7 +158,7 @@ Layer.prototype.action = function(config, elem){
             };
         }
     }
-    
+
     //点遮罩关闭
     if(config.shade && config.shadeClose){
         var shade = elem[claname]('laymshade')[0];
@@ -169,20 +169,20 @@ Layer.prototype.action = function(config, elem){
             layer.close(that.index, config.end);
         };
     }
-    
+
     config.end && (ready.end[that.index] = config.end);
 };
 
 var layer = {
     v: '1.5',
     index: index,
-    
+
     //核心方法
     open: function(options){
         var o = new Layer(options || {});
         return o.index;
     },
-    
+
     close: function(index){
         var ibox = S('#'+classs[0]+index)[0];
         if(!ibox) return;
@@ -191,9 +191,9 @@ var layer = {
         clearTimeout(ready.timer[index]);
         delete ready.timer[index];
         typeof ready.end[index] === 'function' && ready.end[index]();
-        delete ready.end[index]; 
+        delete ready.end[index];
     },
-    
+
     //关闭所有layer层
     closeAll: function(){
         var boxs = doc[claname](classs[0]);
