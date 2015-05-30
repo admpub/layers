@@ -9,7 +9,7 @@ layer.use('skin/layer.ext.css', function(){
 });
 var cache = layer.cache, skin = function(type){
     return (cache.skin ? (' ' + cache.skin + ' ' + cache.skin + '-'+type) : '');
-}
+};
 //仿系统prompt
 layer.prompt = function(options, yes){
     options = options || {};
