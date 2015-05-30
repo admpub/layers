@@ -12,6 +12,7 @@
 
 var $, win, ready = {
     getPath: function(){
+		if(window.LAYER_PATH) return window.LAYER_PATH;
         var js = document.scripts, script = js[js.length - 1], jsPath = script.src;
         if(script.getAttribute('merge')) return;
         return jsPath.substring(0, jsPath.lastIndexOf("/") + 1);
