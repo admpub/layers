@@ -1,18 +1,14 @@
 ﻿/*!
-
- @Name：layer v1.9.2 弹层组件
+ @Name：layer v1.9.3 弹层组件
  @Author：贤心
  @Site：http://layer.layui.com
  @License：LGPL
-
  */
-
 ;!function(window, undefined){
 "use strict";
-
 var $, win, ready = {
     getPath: function(){
-		if(window.LAYER_PATH) return window.LAYER_PATH;
+		if(typeof(window.LAYER_PATH)!='undefined')return window.LAYER_PATH;
         var js = document.scripts, script = js[js.length - 1], jsPath = script.src;
         if(script.getAttribute('merge')) return;
         return jsPath.substring(0, jsPath.lastIndexOf("/") + 1);
@@ -106,8 +102,8 @@ window.layer = {
     },
 
     msg: function(content, options, end){ //最常用提示层
-		var type = typeof options === 'function', rskin = ready.config.skin;
-        var skin = rskin ? 'layui-layer-msg ' + rskin + '-msg' : 'layui-layer-msg';
+        var type = typeof options === 'function', rskin = ready.config.skin;
+        var skin = (rskin ? rskin + ' ' + rskin + '-msg' : '')||'layui-layer-msg';
         var shift = doms.anim.length - 1;
         if(type) end = options;
         return layer.open($.extend({
@@ -147,14 +143,15 @@ window.layer = {
             time: 3000,
             maxWidth: 210
         }, options));
-    }
+    },
+	Objects: {}
 };
 
 var Class = function(setings){
     var that = this;
     that.index = ++layer.index;
     that.config = $.extend({}, that.config, ready.config, setings);
-    that.creat();
+    that.create();
 };
 
 Class.pt = Class.prototype;
@@ -221,8 +218,25 @@ Class.pt.vessel = function(conType, callback){
     return that;
 };
 
+Class.pt.escEvent=function(){
+	var that=this;
+	var lastDialog=$('.'+doms[0]+':last');
+	if(lastDialog.length){
+		var index=lastDialog.attr('times');
+		if(typeof(index)!='undefined'&&index){
+			$(document).on('keydown',function(event){
+				if(event.keyCode==27){
+					layer.close(index);
+				}
+			});
+		}
+	}else{
+		$(document).off('keydown');
+	}
+};
+
 //创建骨架
-Class.pt.creat = function(){
+Class.pt.create = function(){
     var that = this, config = that.config, times = that.index, nodeIndex;
     var content = config.content, conType = typeof content === 'object';
 
@@ -314,7 +328,7 @@ Class.pt.auto = function(index){
             setHeight('iframe');
         break;
         default:
-            if(config.type==1 || config.area[1] === ''){
+            if(config.area[1] === ''){
                 if(config.fix && area[1] > win.height()){
                     area[1] = win.height();
                     setHeight('.'+doms[5]);
@@ -522,13 +536,22 @@ Class.pt.callback = function(){
     layero.find('.'+ doms[6]).children('a').on('click', function(){
         var index = $(this).index();
         if(index === 0){
-            config.yes ? config.yes(that.index, layero) : layer.close(that.index);
+            yes();
         } else if(index === 1){
             cancel();
         } else {
-            config['btn'+(index+1)] ? config['btn'+(index+1)](that.index, layero) : layer.close(that.index);
+			var close = true;
+            if(config['btn'+(index+1)]) close = config['btn'+(index+1)](that.index, layero);
+			if(close) layer.close(that.index);
         }
     });
+
+	//确认
+	function yes(){
+		var close = true;
+		if(config.yes) close = config.yes(that.index,layero);
+        if(close) layer.close(that.index);
+	}
 
     //取消
     function cancel(){
@@ -563,6 +586,7 @@ Class.pt.callback = function(){
         }
     });
 
+	that.escEvent();
     config.end && (ready.end[that.index] = config.end);
 };
 
@@ -760,7 +784,9 @@ layer.close = function(index){
     layer.ie6 && ready.reselect();
     ready.rescollbar(index);
     typeof ready.end[index] === 'function' && ready.end[index]();
-    delete ready.end[index];
+
+	layer.Objects[index].escEvent();
+    delete layer.Objects[index];
 };
 
 //关闭所有层
@@ -780,6 +806,7 @@ ready.run = function(){
     doms.html = $('html');
     layer.open = function(deliver){
         var o = new Class(deliver);
+		layer.Objects[o.index] = o;
         return o.index;
     };
 };
