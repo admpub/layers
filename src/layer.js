@@ -157,8 +157,23 @@ var Class = function(setings){
 Class.pt = Class.prototype;
 
 //缓存常用字符
-var doms = ['layui-layer', '.layui-layer-title', '.layui-layer-main', '.layui-layer-dialog', 'layui-layer-iframe', 'layui-layer-content', 'layui-layer-btn', 'layui-layer-close'];
-doms.anim = ['layui-anim', 'layui-anim-01', 'layui-anim-02', 'layui-anim-03', 'layui-anim-04', 'layui-anim-05', 'layui-anim-06'];
+var doms = [
+    'layui-layer', 
+    '.layui-layer-title', 
+    '.layui-layer-main', 
+    '.layui-layer-dialog', 
+    'layui-layer-iframe', 
+    'layui-layer-content', 
+    'layui-layer-btn', 
+    'layui-layer-close'];
+doms.anim = [
+    'layui-anim', 
+    'layui-anim-01', 
+    'layui-anim-02', 
+    'layui-anim-03', 
+    'layui-anim-04', 
+    'layui-anim-05', 
+    'layui-anim-06'];
 
 //默认配置
 Class.pt.config = {
