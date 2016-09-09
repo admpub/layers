@@ -117,10 +117,10 @@ html #layui_layer_skinlayercss{display:none; position: absolute; width:1989px;}
 
 /* 按钮栏 */
 .layui-layer-btn{text-align:center; padding:10px 30px; pointer-events: auto;}
-.layui-layer-btn a{height:30px; line-height:30px; margin:0 8px; padding:0 20px; background:#5FBFE7; color:#fff; font-size:14px; font-weight:bold; cursor:pointer; text-decoration: none;}
+.layui-layer-btn a{height:30px; line-height:30px; margin:0 8px; padding:0 20px; background:#5FBFE7; color:#fff; font-size:14px; font-weight:bold; cursor:pointer; text-decoration: none;border-radius:3px;text-shadow: 0 0 1px rgba(20,20,20,0.6);}
 .layui-layer-btn a:hover{opacity:0.9; text-decoration: none;}
 .layui-layer-btn a:active{opacity:0.7;}
-.layui-layer-btn .layui-layer-btn1{background:#A6BBCE;}
+.layui-layer-btn .layui-layer-btn1{background:#aaa;}
 
 /* 定制化 */
 .layui-layer-dialog{min-width:240px;}
